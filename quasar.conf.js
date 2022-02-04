@@ -36,6 +36,7 @@ module.exports = configure(function (ctx) {
 
       "roboto-font", // optional, you are not bound to it
       "material-icons", // optional, you are not bound to it
+      "mdi-v5",
     ],
 
     // Full list of options: https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-build
@@ -87,9 +88,7 @@ module.exports = configure(function (ctx) {
           primary: "#2c9c6a",
           secondary: "#26A69A",
           accent: "#9C27B0",
-
           dark: "#1d1d1d",
-
           positive: "#21BA45",
           negative: "#C10015",
           info: "#31CCEC",
