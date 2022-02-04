@@ -2,40 +2,93 @@
   <q-page padding>
     <div class="row">
       <q-table
-        title="Treats"
-        :rows="rows"
+        :rows="categories"
         :columns="columns"
-        row-key="fat"
+        row-key="id"
         class="col-12"
-      />
+        :loading="loading"
+      >
+        <template v-slot:top>
+          <span class="text-h6"> Category </span>
+          <q-space />
+          <q-btn
+            label="Add New"
+            color="primary"
+            icon="mdi-plus-circle-outline"
+            dense
+            :to="{ name: 'form-category' }"
+          />
+        </template>
+        <template v-slot:body-cell-actions="props">
+          <q-td :props="props" class="q-gutter-x-sm">
+            <q-btn icon="mdi-pencil-outline" color="info" dense size="sm">
+              <q-tooltip> Edit </q-tooltip>
+            </q-btn>
+            <q-btn
+              icon="mdi-trash-can-outline"
+              color="negative"
+              dense
+              size="sm"
+            >
+              <q-tooltip> Delet </q-tooltip>
+            </q-btn>
+          </q-td>
+        </template>
+      </q-table>
     </div>
   </q-page>
 </template>
 
 <script>
 const columns = [
-  { name: "fat", label: "Fat (g)", field: "fat", sortable: true },
-  { name: "carbs", label: "Carbs (g)", field: "carbs" },
-  { name: "protein", label: "Protein (g)", field: "protein" },
-];
-
-const rows = [
   {
-    fat: 6.0,
-    carbs: 24,
-    protein: 4.0,
+    name: "name",
+    align: "left",
+    label: "Name",
+    field: "name",
+    sortable: true,
+  },
+  {
+    name: "actions",
+    align: "right",
+    label: "Actions",
+    field: "actions",
+    sortable: true,
   },
 ];
 
-import { defineComponent } from "vue";
+import { defineComponent, ref, onMounted } from "vue";
+import useApi from "src/composables/UseApi";
+import useNotify from "src/composables/UseNotify";
 
 export default defineComponent({
   name: "PageCategoryList",
 
   setup() {
+    const categories = ref([]);
+    const loading = ref(true);
+    const { list } = useApi();
+    const { notifyError } = useNotify();
+
+    const handleListCategories = async () => {
+      try {
+        loading.value = true;
+        categories.value = await list("category");
+        loading.value = false;
+      } catch (error) {
+        notifyError(error.message);
+      }
+    };
+
+    onMounted(() => {
+      handleListCategories();
+    });
+
     return {
       columns,
-      rows,
+      categories,
+      handleListCategories,
+      loading,
     };
   },
 });

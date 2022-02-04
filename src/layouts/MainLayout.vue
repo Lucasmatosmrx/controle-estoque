@@ -11,7 +11,7 @@
           @click="toggleLeftDrawer"
         />
 
-        <q-toolbar-title> Estoque </q-toolbar-title>
+        <q-toolbar-title> Stock </q-toolbar-title>
 
         <q-btn-dropdown flat color="white" icon="person">
           <q-list>
