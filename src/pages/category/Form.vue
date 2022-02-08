@@ -73,6 +73,7 @@ export default defineComponent({
           notifySuccess("Saved Successfully");
           router.push({ name: "category" });
         }
+        router.push({ name: "category" });
       } catch (error) {
         notifyError(error.message);
       }
