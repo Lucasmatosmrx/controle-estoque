@@ -27,7 +27,7 @@
             </q-avatar>
             <q-avatar
               v-else
-              color="black"
+              color="grey"
               text-color="white"
               icon="mdi-image-off"
             />

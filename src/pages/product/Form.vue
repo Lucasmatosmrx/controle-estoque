@@ -10,6 +10,13 @@
         @submit.prevent="handleSubmit"
       >
         <q-input
+          label="Image"
+          stack-label
+          v-model="img"
+          type="file"
+          accept="image/*"
+        />
+        <q-input
           label="Name"
           v-model="form.name"
           :rules="[(val) => (val && val.length >= 4) || 'Name is required']"
@@ -20,13 +27,13 @@
         <q-input
           label="Amount"
           v-model="form.amount"
-          :rules="[(val) => (val && val.length >= 0) || 'Amount is required']"
+          :rules="[(val) => !!val || 'Amount is required']"
           type="number"
         />
         <q-input
           label="Price"
           v-model="form.price"
-          :rules="[(val) => (val && val.length >= 0) || 'Price is required']"
+          :rules="[(val) => !!val || 'Price is required']"
           prefix="R$"
         />
 
@@ -38,6 +45,7 @@
           option-label="name"
           map-options
           emit-value
+          :rules="[(val) => !!val || 'Category is required']"
         />
         <q-btn
           :label="isUpdate ? 'Update' : 'Save'"
@@ -71,7 +79,7 @@ export default defineComponent({
     const table = "product";
     const router = useRouter();
     const route = useRoute();
-    const { post, getByid, update, list } = useApi();
+    const { post, getByid, update, list, uploadImg } = useApi();
     const { notifyError, notifySuccess } = useNotify();
 
     const isUpdate = computed(() => route.params.id);
@@ -84,7 +92,10 @@ export default defineComponent({
       amount: 0,
       price: 0,
       category: "",
+      img_url: "",
     });
+
+    const img = ref([]);
 
     onMounted(() => {
       handleListCategories();
@@ -99,6 +110,10 @@ export default defineComponent({
 
     const handleSubmit = async () => {
       try {
+        if (img.value.length > 0) {
+          const imgUrl = await uploadImg(img.value[0], "products");
+          form.value.img_url = imgUrl;
+        }
         if (isUpdate.value) {
           await update(table, form.value);
           notifySuccess("Update Successfully");
@@ -126,6 +141,7 @@ export default defineComponent({
       form,
       isUpdate,
       optionsCategory,
+      img,
     };
   },
 });
