@@ -38,6 +38,11 @@ const routes = [
         name: "reset-password",
         component: () => import("pages/ResetPassword.vue"),
       },
+      {
+        path: "product-public/:id",
+        name: "product-public",
+        component: () => import("pages/product/Public.vue"),
+      },
     ],
   },
 
