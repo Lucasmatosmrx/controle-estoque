@@ -20,8 +20,8 @@
         </div>
         <div class="text-body2" v-html="product.description" />
       </q-card-section>
-      <q-card-actions>
-        <q-btn label="Cancel" color="primary" v-close-popup />
+      <q-card-actions align="right">
+        <q-btn label="Cancel" color="primary" outline v-close-popup />
         <q-btn
           label="Fazer Pedido"
           icon="mdi-whatsapp"
@@ -36,6 +36,7 @@
 <script>
 import { defineComponent } from "vue";
 import { formatCurrency } from "src/utils/format";
+import { openURL } from "quasar";
 
 export default defineComponent({
   name: "DialogProductDetails",
@@ -49,12 +50,19 @@ export default defineComponent({
     },
   },
   setup(props, { emit }) {
+    const phone = "69981464720";
+    const msg = "Olá, fiquei interressado no produto: ";
     const handleClose = () => {
       emit("hideDialog");
     };
 
     const handleSendWpp = () => {
-      alert("Enviado para o wpp");
+      const link = encodeURI(
+        `https://api.whatsapp.com/send?phone=55${phone}&text=${msg} - ${
+          props.product.name
+        } - ${formatCurrency(props.product.price)}`
+      );
+      openURL(link);
     };
 
     return {
