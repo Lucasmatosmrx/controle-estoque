@@ -50,7 +50,7 @@ export default defineComponent({
     },
   },
   setup(props, { emit }) {
-    const phone = "69981464720";
+    const phone = "sem numero";
     const msg = "Olá, fiquei interressado no produto: ";
     const handleClose = () => {
       emit("hideDialog");
