@@ -1,14 +1,35 @@
 <template>
   <q-page padding>
+    <div class="row" v-if="brand.name">
+      <div class="col-12 text-center text-h4">
+        {{ brand.name }}
+      </div>
+    </div>
     <div class="row">
+      <q-select
+        outlined
+        v-model="categoryId"
+        :options="optionsCategories"
+        label="Category"
+        option-label="name"
+        option-value="id"
+        map-options
+        emit-value
+        clearable
+        class="col-12"
+        dense
+        @update:model-value="handleListProducts(route.params.id)"
+      />
       <q-table
         :rows="products"
         :columns="columnsProduct"
+        v-model:pagination="initialPagination"
         row-key="id"
         class="col-12"
         :loading="loading"
         :filter="filter"
         grid
+        hide-pagination
       >
         <template v-slot:top>
           <span class="text-h6"> Products </span>
@@ -46,6 +67,14 @@
         </template>
       </q-table>
     </div>
+    <div class="row justify-center">
+      <q-pagination
+        v-model="initialPagination.page"
+        :max="pagesNumber"
+        direction-links
+        @update:model-value="handleScrollToTop"
+      />
+    </div>
     <dialog-product-details
       :show="showDialogDetails"
       :product="productDetails"
@@ -55,10 +84,10 @@
 </template>
 
 <script>
-import { defineComponent, ref, onMounted } from "vue";
+import { defineComponent, ref, onMounted, computed } from "vue";
 import useApi from "src/composables/UseApi";
 import useNotify from "src/composables/UseNotify";
-import { columnsProduct } from "./table";
+import { columnsProduct, initialPagination } from "./table";
 import { useRoute } from "vue-router";
 import { formatCurrency } from "src/utils/format";
 import DialogProductDetails from "src/components/DialogProductDetails";
@@ -76,15 +105,19 @@ export default defineComponent({
     const table = "product";
     const showDialogDetails = ref(false);
     const productDetails = ref({});
+    const optionsCategories = ref([]);
+    const categoryId = ref("");
 
-    const { listPublic } = useApi();
+    const { listPublic, brand } = useApi();
     const { notifyError } = useNotify();
     const route = useRoute();
 
     const handleListProducts = async (userId) => {
       try {
         loading.value = true;
-        products.value = await listPublic(table, userId);
+        products.value = categoryId.value
+          ? await listPublic(table, userId, "category", categoryId.value)
+          : await listPublic(table, userId);
         loading.value = false;
       } catch (error) {
         notifyError(error.message);
@@ -96,8 +129,17 @@ export default defineComponent({
       showDialogDetails.value = true;
     };
 
+    const handleListCategories = async (userId) => {
+      optionsCategories.value = await listPublic("category", userId);
+    };
+
+    const handleScrollToTop = () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+
     onMounted(() => {
       if (route.params.id) {
+        handleListCategories(route.params.id);
         handleListProducts(route.params.id);
       }
     });
@@ -111,6 +153,16 @@ export default defineComponent({
       showDialogDetails,
       productDetails,
       handleShowDetails,
+      brand,
+      optionsCategories,
+      categoryId,
+      route,
+      handleListProducts,
+      initialPagination,
+      handleScrollToTop,
+      pagesNumber: computed(() =>
+        Math.ceil(products.value.length / initialPagination.value.rowPerPage)
+      ),
     };
   },
 });

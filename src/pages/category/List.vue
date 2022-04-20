@@ -63,6 +63,7 @@ import useNotify from "src/composables/UseNotify";
 import { useRouter } from "vue-router";
 import { useQuasar } from "quasar";
 import { columnsCategory } from "./table";
+import useAuthUser from "src/composables/UseAuthUser";
 
 export default defineComponent({
   name: "PageCategoryList",
@@ -73,14 +74,15 @@ export default defineComponent({
     const router = useRouter();
     const table = "category";
     const $q = useQuasar();
+    const { user } = useAuthUser();
 
-    const { list, remove } = useApi();
+    const { listPublic, remove } = useApi();
     const { notifyError, notifySuccess } = useNotify();
 
     const handleListCategories = async () => {
       try {
         loading.value = true;
-        categories.value = await list(table);
+        categories.value = await listPublic(table, user.value.id);
         loading.value = false;
       } catch (error) {
         notifyError(error.message);
