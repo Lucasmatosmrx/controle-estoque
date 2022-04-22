@@ -18,6 +18,7 @@ export default defineComponent({
     const $q = useQuasar();
     watch(darkMode, (darkMode) => {
       $q.dark.set(darkMode);
+      $q.addressbarColor.set("red");
       $q.localStorage.set("darkMode", darkMode);
     });
 
