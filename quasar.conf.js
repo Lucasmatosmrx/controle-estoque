@@ -107,7 +107,7 @@ module.exports = configure(function (ctx) {
       // directives: [],
 
       // Quasar plugins
-      plugins: ["Notify", "Dialog", "Loading"],
+      plugins: ["Notify", "Dialog", "Loading", "LocalStorage"],
     },
 
     // animations: 'all', // --- includes all animations
@@ -140,7 +140,11 @@ module.exports = configure(function (ctx) {
     // https://quasar.dev/quasar-cli/developing-pwa/configuring-pwa
     pwa: {
       workboxPluginMode: "GenerateSW", // 'GenerateSW' or 'InjectManifest'
-      workboxOptions: { skipWaiting: true, clientsClaim: true }, // only for GenerateSW
+      workboxOptions: {
+        skipWaiting: true,
+        clientsClaim: true,
+        //  debugger: false,
+      }, // only for GenerateSW
 
       // for the custom service worker ONLY (/src-pwa/custom-service-worker.[js|ts])
       // if using workbox in InjectManifest mode
@@ -156,6 +160,7 @@ module.exports = configure(function (ctx) {
         orientation: "portrait",
         background_color: "#ffffff",
         theme_color: "#2c9c3a",
+        categories: ["utilities", "productivity", "personalization"],
         icons: [
           {
             src: "icons/icon-128x128.png",

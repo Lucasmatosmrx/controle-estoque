@@ -12,7 +12,7 @@
         />
 
         <q-toolbar-title> Stock </q-toolbar-title>
-
+        <dark-mode-toogle />
         <q-btn-dropdown flat color="white" icon="person">
           <q-list>
             <q-item clickable v-close-popup @click="handleLogout">
@@ -45,6 +45,7 @@
 
 <script>
 import EssentialLink from "components/EssentialLink.vue";
+import DarkModeToogle from "components/DarkModeToggle.vue";
 
 const linksList = [
   {
@@ -84,6 +85,7 @@ export default defineComponent({
 
   components: {
     EssentialLink,
+    DarkModeToogle,
   },
 
   setup() {
