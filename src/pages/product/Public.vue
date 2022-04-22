@@ -49,7 +49,7 @@
         </template>
 
         <template v-slot:item="props">
-          <div class="q-pa-xs col-xs-12 col-sm-6 col-md-4">
+          <div class="q-pa-xs col-xs-12 col-sm-6 col-md-3">
             <q-card
               class="cursor-pointer"
               v-ripple:primary
@@ -63,6 +63,15 @@
                 </div>
               </q-card-section>
             </q-card>
+          </div>
+          <div class="col-12" v-if="props.rowIndex === 3 && brand.paralax_url">
+            <q-parallax :height="200" :speed="0.5">
+              <template v-slot:media>
+                <img :src="brand.paralax_url" />
+              </template>
+
+              <h1 class="text-white">{{ brand.name }}</h1>
+            </q-parallax>
           </div>
         </template>
       </q-table>
@@ -161,7 +170,7 @@ export default defineComponent({
       initialPagination,
       handleScrollToTop,
       pagesNumber: computed(() =>
-        Math.ceil(products.value.length / initialPagination.value.rowPerPage)
+        Math.ceil(products.value.length / initialPagination.value.rowsPerPage)
       ),
     };
   },

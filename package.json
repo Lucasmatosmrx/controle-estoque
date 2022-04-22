@@ -9,19 +9,20 @@
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
-    "@quasar/extras": "^1.0.0",
+    "@quasar/extras": "^1.13.5",
     "@supabase/supabase-js": "^1.29.4",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
-    "quasar": "^2.0.0",
+    "quasar": "^2.6.6",
     "uuid": "^8.3.2",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0",
     "vuex": "^4.0.1"
   },
   "devDependencies": {
-    "@quasar/app": "^3.0.0",
-    "strip-ansi": "=3.0.1"
+    "@quasar/app-webpack": "^3.5.1",
+    "strip-ansi": "=3.0.1",
+    "workbox-webpack-plugin": "^6.0.0"
   },
   "browserslist": [
     "last 10 Chrome versions",
